@@ -1,0 +1,247 @@
+<html>
+	<style>
+body{
+	--Black: rgba(44, 44, 44);
+	--Green: rgba(222, 254, 224);
+	--Empty: rgba(222, 254, 224, 0);
+	background-color: black;
+}
+.False-Caret-On{
+	float: right;
+	background-color: var(--Green);
+	z-index: 100000;
+	width: 8px;
+	height: 16px;
+}
+.False-Caret-Off{
+	float: right;
+	background-color: var(--Black);
+	z-index: 100000;
+	width: 8px;
+	height: 16px;
+}
+
+.CaretBar{
+	position: absolute;
+	top: 0;
+	left: 19;
+}
+.Window{
+	color: var(--Green);
+	font-weight: bold;
+	background-color: var(--Black);
+	font-family: monospace;
+	font-style: normal; 
+	font-variant: normal;
+	border: 1px solid grey;
+	margin: auto;
+	height: 550px;
+	width: 700px;
+}
+.WinTop{
+	color: var(--Black);
+	font-weight: bold;
+	background-color: var(--Green);
+	position: relative;
+	margin: 3px;
+	padding-left: 8px;
+	padding-right: 2px;
+	padding-top: 1px;
+	height: 20px;
+}
+.Location{
+	position: absolute;
+}
+.Score{
+	position: absolute;
+	left: 425px;
+}
+.Moves{
+	position: absolute;
+	left: 600px;
+}
+.WinMidA{
+	position: absolute;
+	padding-left: 6px;
+	top: 45px;
+	height: 125px;
+	width: 692px;
+}
+.WinMidB{
+	position: absolute;
+	padding-left: 6px;
+	top: 170px;
+	height: 125px;
+	width: 692px;
+}
+.WinMidC{
+	position: absolute;
+	padding-left: 6px;
+	top: 295px;
+	height: 125px;
+	width: 692px;
+}
+.WinBot{
+	background-color: var(--Black);
+	color: var(--Green);
+	font-weight: bold;
+	position: absolute;
+	padding-left: 6px;
+	top: 432px;
+	height: 125px;
+	width: 692px;
+}
+.PlayerInput{
+	background-color: var(--Empty);
+	font-family: Monospace;
+	caret-color: var(--Empty);
+	color: var(--Empty);
+	font-weight: bold;
+	outline: none;
+	border: 0px solid blue;
+	position: absolute;
+	padding-left: 6px;
+	top: 2px;
+	width: 680px;
+}
+	</style>
+	<head>
+		<title> SORP </title>
+	</head>
+	<body id="body" onload="onBodyLoad()" onKeyPress="onKeyChange()">
+		<div class="Window">
+			<div class="WinTop" id="WinTop">
+				<div class="Location" id="Location">
+				</div>
+				<div class="Score" id="Score">
+				</div>
+				<div class="Moves" id="Moves">
+				</div>
+			</div>
+			<div class="WinMidA" id="GSA">
+			</div>
+			<div class="WinMidB" id="GSB">
+			</div>
+			<div class="WinMidC" id="GSC">
+			</div>
+			<div class="WinBot" id="GSC">
+			>
+				<tt class="CaretBar" id="CaretBar">
+					<div class="False-Caret" id="FCaret"></div>
+				</tt>
+				<input class="PlayerInput" id="PlayerInput">
+					
+				</input>
+			</div>
+			
+		</div>
+	</body>
+	<script>
+	
+var TopBox = document.getElementById("WinTop");
+var LocBox = document.getElementById("Location");
+var ScrBox = document.getElementById("Score");
+var MovBox = document.getElementById("Moves");
+var	VERWin = document.getElementById("GSA");
+var GSBWin = document.getElementById("GSB");
+var ACTWin = document.getElementById("GSC");
+var InputWin = document.getElementById("PlayerInput");
+var FalseCaret = document.getElementById("FCaret");
+var CaretBar = document.getElementById("CaretBar");
+
+var NEWL = '</br>';
+var VerData = NEWL.concat('SORP : The Great ISP', NEWL, 'Copyright (c) N/A', NEWL, 'Created by Charles', NEWL, 'Revision 1 / Development 5.19.1835');
+var Location = 'Introduction';
+var Score = 0;
+var Moves = 0;
+var CurTextLen = 0;
+var doBlink = 0;
+var BlinkOnOff = 0;
+
+var CURACTN = 0;
+var NoAction = ''.concat('There is no functionality yet.',NEWL,'Just a console.');
+var NoActionOkay = ''.concat('No functionality yet.');
+
+function setTopBarInfo(){
+	
+	LocBox.innerHTML = Location;
+	ScrBox.innerHTML = 'Score: '.concat(Score);
+	MovBox.innerHTML = 'Moves: '.concat(Moves);
+}
+function onBodyLoad(){
+	VERWin.innerHTML = VerData;
+	GSBWin.innerHTML = NEWL.concat('Welcome to the develeopment version',NEWL,'This doesn\'t do much yet.');
+	ACTWin.innerHTML = '';
+	setTopBarInfo();
+	delayCaret();
+}
+function moveCaret(){
+	ToBox = InputWin.value;
+	WriteOut = '';
+	CaretBar.innerHTML = '';
+	CaretClass = '';
+	LEN = ToBox.length;
+	if(LEN > CurTextLen || CurTextLen > LEN){
+		BlinkOnOff = 0;
+		doBlink = 0;
+	}
+	CurTextLen = LEN;
+	if(LEN > 0){
+		cnt = 0
+		do{
+			if(ToBox[cnt] == ' '){
+				WriteOut = WriteOut.concat('&nbsp;');
+			} else {
+				WriteOut = WriteOut.concat(ToBox[cnt]);
+			}
+			cnt = cnt + 1;
+		}while(cnt < LEN);
+	}
+	if(doBlink >= 15){
+		if(BlinkOnOff == 0){
+			BlinkOnOff = 1;
+			console.log('blink off');
+		}else if(BlinkOnOff == 1){
+			BlinkOnOff = 0;
+			console.log('blink on');
+		}
+		doBlink = 0;
+	}
+	doBlink = doBlink + 1;
+	if(BlinkOnOff == 0){
+		CaretClass = 'False-Caret-On';
+	}
+	if(BlinkOnOff == 1){
+		CaretClass = 'False-Caret-Off';
+	}
+	CaretBar.innerHTML = WriteOut.concat('<div class="',CaretClass,'" id="FCaret"></div>');
+	delayCaret();
+}
+function delayCaret(){
+	InputWin.focus();
+	setTimeout(moveCaret, 50);
+}
+
+function nextLine(){
+	if(CURACTN == 0){
+		ACTWin.innerHTML = NoActionOkay;
+		CURACTN = 1;
+	} else if(CURACTN == 1){
+		ACTWin.innerHTML = NoAction;
+		CURACTN = 0;
+	};
+	InputWin.value = '';
+}
+function onKeyChange(){
+	saved_keydown = document.getElementById("body").onkeypress;
+	document.getElementById("body").onkeypress = null;
+	var test = event.keyCode;
+		if(test == 13){
+			nextLine();
+		}
+		document.getElementById("body").onkeypress = saved_keydown;
+	console.log('KEY Was ',test);
+	return;
+}
+	</script>
+</html>
